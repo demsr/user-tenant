@@ -13,18 +13,17 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 const User = require("./models/User");
-const Tenant = require("./models/Tenant");
 
 const publicKey = fs.readFileSync("./public.key", "utf8");
 
 app.use(jwt({ secret: publicKey, algorithms: ["RS256"] }));
 
-app.use(guard.check("tenant:read"));
+app.use(guard.check("user:read"));
 
 app.get("/", (req, res) => {
-  Tenant.find({}, (err, tenants) => {
+  User.find({}, (err, users) => {
     if (err) return res.status(500).send("app.find err");
-    res.send(tenants);
+    res.send(users);
   });
 });
 
